@@ -1,52 +1,61 @@
 const express = require('express');
-const client = require('prom-client');
-
+const path = require('path');
+const promClient = require('prom-client');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuração do Prometheus
-const register = new client.Registry();
-client.collectDefaultMetrics({ register });
+// Configurar coleta de métricas padrão
+promClient.collectDefaultMetrics();
 
-// Middlewares
-app.use(express.json());
-
-// Métricas customizadas
-const httpRequestDuration = new client.Histogram({
+// Criar métricas customizadas
+const httpRequestDuration = new promClient.Histogram({
   name: 'http_request_duration_seconds',
   help: 'Duration of HTTP requests in seconds',
-  labelNames: ['method', 'status_code'],
-  registers: [register]
+  labelNames: ['method', 'route', 'status'],
+  buckets: [0.1, 0.5, 1, 2, 5]
 });
 
-const httpRequestsTotal = new client.Counter({
+const httpRequestTotal = new promClient.Counter({
   name: 'http_requests_total',
   help: 'Total number of HTTP requests',
-  labelNames: ['method', 'status_code'],
-  registers: [register]
+  labelNames: ['method', 'route', 'status']
+});
+
+const activeConnections = new promClient.Gauge({
+  name: 'active_connections',
+  help: 'Number of active connections'
 });
 
 // Middleware para métricas
 app.use((req, res, next) => {
   const start = Date.now();
-  
+  activeConnections.inc();
+
   res.on('finish', () => {
     const duration = (Date.now() - start) / 1000;
-    httpRequestDuration
-      .labels(req.method, res.statusCode)
-      .observe(duration);
+    const route = req.route?.path || req.path;
     
-    httpRequestsTotal
-      .labels(req.method, res.statusCode)
-      .inc();
+    httpRequestDuration.observe(
+      { method: req.method, route, status: res.statusCode },
+      duration
+    );
+    
+    httpRequestTotal.inc({
+      method: req.method,
+      route,
+      status: res.statusCode
+    });
+    
+    activeConnections.dec();
   });
   
   next();
 });
 
-// Rotas
+app.use(express.static('public'));
+
 app.get('/health', (req, res) => {
-  res.json({
+  res.status(200).json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
@@ -55,45 +64,38 @@ app.get('/health', (req, res) => {
 
 app.get('/api/info', (req, res) => {
   res.json({
-    app: 'DevOps App GCP Aula 4',
-    version: '2.0.0',
+    app: 'DevOps App GCP',
+    version: '1.0.0',
     environment: process.env.NODE_ENV || 'development',
-    timestamp: new Date().toISOString()
+    pod: process.env.HOSTNAME || 'localhost'
   });
 });
 
+// Endpoint de métricas
 app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', promClient.register.contentType);
   try {
-    res.set('Content-Type', register.contentType);
-    res.end(await register.metrics());
+    const metrics = await promClient.register.metrics();
+    res.end(metrics);
   } catch (error) {
-    res.status(500).end(error.message);
+    res.status(500).end(error);
   }
 });
 
-// Middleware 404
-app.use((req, res) => {
-  res.status(404).json({
-    error: 'Not Found',
-    message: 'The requested resource was not found'
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+const server = app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated');
   });
 });
 
-// Middleware de erro
-app.use((error, req, res, next) => {
-  console.error('Error:', error);
-  res.status(500).json({
-    error: 'Internal Server Error',
-    message: 'Something went wrong'
-  });
-});
-
-// Exportar app para testes
 module.exports = app;
-
-// Iniciar servidor apenas se executado diretamente
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-  });
-}
