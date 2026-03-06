@@ -1,31 +1,13 @@
-# 🚀 Descomplicando a Stack DevOps no Google Cloud Platform
+# 🚀 Projeto completo utilizando a Google Cloud Platform
 
 > **DevOps: A Ponte entre o Código e o Deploy**
 
 ---
 
-## 📑 Índice
-
-- [Sobre o Treinamento](#-sobre-o-treinamento)
-- [Pré-requisitos](#-pré-requisitos)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Quick Start](#-quick-start)
-- [Dia 1: Docker e Containerização](#-dia-1-docker-e-containerização)
-- [Dia 2: Terraform e Infrastructure as Code](#-dia-2-terraform-e-infrastructure-as-code)
-- [Dia 3: Kubernetes no GKE](#-dia-3-kubernetes-no-gke)
-- [Dia 4: CI/CD Pipeline](#-dia-4-cicd-pipeline-com-github-actions)
-- [Dia 5: Monitoramento](#-dia-5-monitoramento-com-prometheus-e-grafana)
-- [Dia 6: Service Mesh com Istio](#-dia-6-service-mesh-com-istio)
-- [Comandos Úteis](#-comandos-úteis)
-- [Troubleshooting](#-troubleshooting)
-- [Limpeza de Recursos](#-limpeza-de-recursos)
-- [Próximos Passos](#-próximos-passos)
-
----
 
 ## 📖 Sobre o Treinamento
 
-Este é um **treinamento prático e imersivo** que ensina como construir e gerenciar uma pipeline completa de DevOps no Google Cloud Platform. Você aprenderá desde a conteinerização até o deploy automatizado em Kubernetes, passando por Infrastructure as Code com Terraform, monitoramento com Prometheus e Grafana, e overview de microserviços com Service Mesh e Istio.
+Este é um **projeto** que ensina como construir e gerenciar uma pipeline completa de DevOps no Google Cloud Platform. Será apresentado desde a conteinerização até o deploy automatizado em Kubernetes, passando por Infrastructure as Code com Terraform, monitoramento com Prometheus e Grafana, e overview de microserviços com Service Mesh e Istio.
 
 ### 🎯 O que você vai aprender
 
@@ -36,22 +18,9 @@ Este é um **treinamento prático e imersivo** que ensina como construir e geren
 - 🔄 **CI/CD com GitHub Actions**
 - 🕸️ **Microserviços com Service Mesh e Istio**
 
-### 👥 Para quem é este treinamento
-
-- **Desenvolvedores** que querem entender o ciclo de vida de suas aplicações
-- **Profissionais de Infraestrutura** que desejam modernizar suas práticas
-- **Profissionais de TI** buscando conhecimentos em DevOps
 
 ---
 
-## ⚙️ Pré-requisitos
-
-### 📚 Conhecimento
-
-- ✅ **Linux e linha de comando** (obrigatório)
-- 📘 **Docker** (desejável)
-- 📘 **Programação básica** (desejável)
-- 📘 **Terraform e Kubernetes** (desejável)
 
 ### 🛠️ Ferramentas Necessárias
 
