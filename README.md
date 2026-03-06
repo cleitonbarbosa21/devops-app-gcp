@@ -5,7 +5,7 @@
 ---
 
 
-## 📖 Sobre o Treinamento
+## 📖 Sobre o Projeto
 
 Este é um **projeto** que ensina como construir e gerenciar uma pipeline completa de DevOps no Google Cloud Platform. Será apresentado desde a conteinerização até o deploy automatizado em Kubernetes, passando por Infrastructure as Code com Terraform, monitoramento com Prometheus e Grafana, e overview de microserviços com Service Mesh e Istio.
 
