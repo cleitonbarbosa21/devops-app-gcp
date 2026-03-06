@@ -1974,4 +1974,3 @@ Feito com ❤️ para a comunidade DevOps brasileira!
 
 ---
 
-**⭐ Se este guia foi útil, dê uma estrela no [repositório GitHub](https://github.com/camilla-m/devops-app-gcp)!**
